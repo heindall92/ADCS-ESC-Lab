@@ -38,3 +38,8 @@ tsconfig.tsbuildinfo
 .lovable/
 .workspace/
 
+# HyperFrames build/render outputs
+hyperframes/hero-motion/renders/
+hyperframes/hero-motion/snapshots/
+
+

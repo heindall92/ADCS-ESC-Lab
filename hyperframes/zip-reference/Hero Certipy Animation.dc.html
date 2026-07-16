@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@keyframes cc-blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+@keyframes cell-pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
+@keyframes glow-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.cc{display:inline-block;width:.5ch;height:1.05em;vertical-align:-.16em;margin-left:1px;border-radius:1px;animation:cc-blink 1s steps(1) infinite}
+.pulse{animation:cell-pulse 1.4s ease-in-out infinite}
+</style>
+</helmet>
+<div style="font-family:'Instrument Sans',system-ui,sans-serif;width:100%;height:100%;min-height:520px;display:flex;padding:2px;box-sizing:border-box">
+  <div style="position:relative;flex:1;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.16);background:color-mix(in oklab, oklch(0.129 0.042 264.695) 78%, transparent);backdrop-filter:blur(24px);box-shadow:0 24px 60px -24px rgba(0,0,0,.6)">
+
+    <!-- ambient accent glow -->
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 45% at 78% 8%, color-mix(in oklab, {{ accent }} 16%, transparent), transparent 70%)"></div>
+
+    <!-- title bar -->
+    <div style="position:relative;display:flex;align-items:center;gap:9px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.22)">
+      <span style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18)"></span>
+      <span style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18)"></span>
+      <span style="width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18)"></span>
+      <span style="margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:oklch(0.72 0.02 255)">certipy-ad — lab.local</span>
+      <div style="margin-left:auto;display:flex;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.12em">
+        <span style="padding:4px 9px;border-radius:999px;color: {{ pillFindC }};background: {{ pillFindBg }};border:1px solid {{ pillFindBd }}">FIND</span>
+        <span style="padding:4px 9px;border-radius:999px;color: {{ pillReqC }};background: {{ pillReqBg }};border:1px solid {{ pillReqBd }}">REQ</span>
+        <span style="padding:4px 9px;border-radius:999px;color: {{ pillAuthC }};background: {{ pillAuthBg }};border:1px solid {{ pillAuthBd }}">AUTH</span>
+      </div>
+    </div>
+
+    <!-- body -->
+    <div style="position:relative;flex:1;display:grid;grid-template-columns:1.15fr .85fr;gap:0;min-height:0">
+
+      <!-- log pane -->
+      <div style="padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.62;overflow:hidden;border-right:1px solid rgba(255,255,255,.06)">
+        <sc-for list="{{ lines }}" as="ln" hint-placeholder-count="7">
+          <div style="white-space:pre-wrap;word-break:break-word;margin-bottom:1px"><span style="color: {{ ln.prefixColor }}">{{ ln.prefix }}</span><span style="color: {{ ln.color }}">{{ ln.text }}</span><sc-if value="{{ ln.caret }}" hint-placeholder-val="{{ false }}"><span class="cc" style="background: {{ accent }}"></span></sc-if></div>
+        </sc-for>
+      </div>
+
+      <!-- visual pane -->
+      <div style="position:relative;padding:18px;display:flex;flex-direction:column;min-height:0;background:rgba(0,0,0,.16)">
+
+        <!-- FIND -->
+        <sc-if value="{{ isFind }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;height:100%">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.2em;color:oklch(0.72 0.02 255)">ENUMERACIÓN</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:oklch(0.985 0.003 248)">{{ scanCount }}/32</span>
+            </div>
+            <div style="margin-top:8px;height:3px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden">
+              <div style="height:100%;border-radius:2px;background: {{ accent }};width: {{ scanW }}"></div>
+            </div>
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(8,1fr);gap:5px">
+              <sc-for list="{{ cells }}" as="c" hint-placeholder-count="32">
+                <div class="{{ c.cls }}" style="aspect-ratio:1;border-radius:4px;background: {{ c.bg }};border:1px solid {{ c.bd }}"></div>
+              </sc-for>
+            </div>
+            <div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ escChips }}" as="e" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background: {{ e.bg }};border:1px solid {{ e.bd }};opacity: {{ e.op }};transform: translateY({{ e.ty }})">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color: {{ accent }}">{{ e.id }}</span>
+                  <span style="font-size:11px;color:oklch(0.82 0.02 255)">{{ e.desc }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- REQ -->
+        <sc-if value="{{ isReq }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;height:100%">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.2em;color:oklch(0.72 0.02 255)">CERTIFICADO</span>
+            <div style="margin-top:12px;flex:1;border-radius:12px;border:1px solid {{ certBd }};background:rgba(255,255,255,.03);padding:16px;display:flex;flex-direction:column;box-shadow: {{ certShadow }};transition:box-shadow .4s">
+              <div style="display:flex;flex-direction:column;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11.5px">
+                <div style="display:flex;justify-content:space-between"><span style="color:oklch(0.6 0.02 255)">subject</span><span style="color:oklch(0.9 0.02 255)">administrator@lab.local</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:oklch(0.6 0.02 255)">template</span><span style="color: {{ accent }}">VulnUser · ESC1</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:oklch(0.6 0.02 255)">ca</span><span style="color:oklch(0.9 0.02 255)">LAB-CA</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:oklch(0.6 0.02 255)">key</span><span style="color:oklch(0.9 0.02 255)">RSA-2048</span></div>
+              </div>
+              <div style="margin-top:14px;height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden">
+                <div style="height:100%;border-radius:2px;background: {{ accent }};width: {{ reqW }}"></div>
+              </div>
+              <div style="margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:9px;opacity: {{ issuedOp }};transform: translateY({{ issuedTy }});transition:opacity .4s, transform .4s">
+                <span style="width:8px;height:8px;border-radius:50%;background: {{ accent }};box-shadow:0 0 10px {{ accent }}"></span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color: {{ accent }}">EMITIDO · administrator.pfx</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- AUTH -->
+        <sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;height:100%">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.2em;color:oklch(0.72 0.02 255)">AUTENTICACIÓN</span>
+            <div style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;border:1px solid {{ tgtBd }};background:rgba(255,255,255,.03);opacity: {{ tgtOp }};transform: translateY({{ tgtTy }});transition:all .4s">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color: {{ tgtMark }}">[+]</span>
+              <span style="font-size:12.5px;color:oklch(0.9 0.02 255)">TGT Kerberos obtenido</span>
+              <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:oklch(0.6 0.02 255)">krbtgt</span>
+            </div>
+            <div style="margin-top:12px;flex:1;border-radius:12px;border:1px solid {{ hashBd }};background:rgba(0,0,0,.28);padding:16px;display:flex;flex-direction:column;justify-content:center;box-shadow: {{ hashShadow }};transition:box-shadow .5s">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.16em;color:oklch(0.72 0.02 255)">NT HASH · administrator</span>
+                <span style="font-size:9.5px;font-weight:700;letter-spacing:.1em;padding:3px 8px;border-radius:999px;color: {{ accent }};background: {{ tagBg }};opacity: {{ tagOp }}">DOMAIN ADMIN</span>
+              </div>
+              <div style="margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;word-break:break-all;color: {{ hashColor }};text-shadow: {{ hashGlow }}">{{ hashText }}</div>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+
+    <!-- footer progress -->
+    <div style="position:relative;display:flex;align-items:center;gap:12px;padding:11px 16px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.22)">
+      <div style="flex:1;display:flex;gap:5px">
+        <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.09);overflow:hidden"><div style="height:100%;background: {{ accent }};width: {{ segFind }}"></div></div>
+        <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.09);overflow:hidden"><div style="height:100%;background: {{ accent }};width: {{ segReq }}"></div></div>
+        <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.09);overflow:hidden"><div style="height:100%;background: {{ accent }};width: {{ segAuth }}"></div></div>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:oklch(0.72 0.02 255)">{{ caption }}</span>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:980,&quot;height&quot;:560},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.68 0.16 150)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.68 0.16 150)&quot;,&quot;oklch(0.62 0.2 250)&quot;,&quot;oklch(0.72 0.17 60)&quot;,&quot;oklch(0.6 0.22 25)&quot;,&quot;oklch(0.68 0.13 195)&quot;,&quot;oklch(0.62 0.2 300)&quot;]},&quot;speed&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.4,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this.t0 = performance.now();
+    const tick = () => {
+      const spd = this.props.speed ?? 1;
+      this.setState({ t: ((performance.now() - this.t0) / 1000) * spd });
+      this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+
+  renderVals() {
+    const accent = this.props.accent ?? "oklch(0.68 0.16 150)";
+    const C = {
+      cmd: "oklch(0.9 0.03 255)",
+      comment: "oklch(0.62 0.05 150)",
+      string: "oklch(0.8 0.15 130)",
+      warning: "oklch(0.78 0.17 65)",
+      muted: "oklch(0.72 0.02 255)",
+      fg: "oklch(0.985 0.003 248)",
+    };
+    const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+    const lerp = (a, b, p) => a + (b - a) * clamp(p, 0, 1);
+    const pct = (x) => (clamp(x, 0, 1) * 100).toFixed(1) + "%";
+
+    // phases
+    const D_FIND = 6.6, D_REQ = 6.0, D_AUTH = 7.0;
+    const LOOP = D_FIND + D_REQ + D_AUTH;
+    const t = (this.state.t || 0) % LOOP;
+    let phase, rt, dur;
+    if (t < D_FIND) { phase = "find"; rt = t; dur = D_FIND; }
+    else if (t < D_FIND + D_REQ) { phase = "req"; rt = t - D_FIND; dur = D_REQ; }
+    else { phase = "auth"; rt = t - D_FIND - D_REQ; dur = D_AUTH; }
+
+    // ---- log builder ----
+    const build = (entries) => {
+      const out = [];
+      let typingIdx = -1;
+      entries.forEach((e) => {
+        if (rt < e.at) return;
+        if (e.type === "cmd") {
+          const n = clamp(Math.floor(((rt - e.at) / e.dur) * e.text.length), 0, e.text.length);
+          const typing = n < e.text.length;
+          if (typing) typingIdx = out.length;
+          out.push({ prefix: "$ ", prefixColor: accent, text: e.text.slice(0, n), color: C.cmd, caret: false });
+        } else {
+          out.push({ prefix: "", prefixColor: accent, text: e.text, color: e.color, caret: false });
+        }
+      });
+      if (out.length) {
+        const idx = typingIdx >= 0 ? typingIdx : out.length - 1;
+        out[idx].caret = true;
+      }
+      return out;
+    };
+
+    const findEntries = [
+      { type: "cmd", at: 0.2, dur: 2.3, text: "certipy-ad find -u lowpriv@lab.local -p '******' -dc-ip 10.10.10.10 -vulnerable" },
+      { type: "out", at: 2.9, color: C.comment, text: "[*] Finding certificate templates" },
+      { type: "out", at: 3.4, color: C.comment, text: "[*] Finding certificate authorities" },
+      { type: "out", at: 4.4, color: C.comment, text: "[*] Found 32 certificate templates" },
+      { type: "out", at: 5.0, color: C.warning, text: "[!] Vulnerabilities" },
+      { type: "out", at: 5.4, color: accent, text: "    ESC1  ENROLLEE_SUPPLIES_SUBJECT" },
+      { type: "out", at: 5.8, color: accent, text: "    ESC4  Dangerous ACL on template" },
+      { type: "out", at: 6.1, color: accent, text: "    ESC8  Web Enrollment + NTLM" },
+    ];
+    const reqEntries = [
+      { type: "cmd", at: 0.2, dur: 2.5, text: "certipy-ad req -u lowpriv@lab.local -ca LAB-CA -template VulnUser -upn administrator@lab.local" },
+      { type: "out", at: 3.1, color: C.comment, text: "[*] Requesting certificate via RPC" },
+      { type: "out", at: 3.7, color: C.comment, text: "[*] Successfully requested certificate" },
+      { type: "out", at: 4.2, color: C.comment, text: "[*] Request ID is 1337" },
+      { type: "out", at: 4.7, color: C.string, text: "[+] Got certificate with UPN 'administrator@lab.local'" },
+      { type: "out", at: 5.2, color: C.string, text: "[+] Saved certificate and private key to 'administrator.pfx'" },
+    ];
+    const authEntries = [
+      { type: "cmd", at: 0.2, dur: 2.1, text: "certipy-ad auth -pfx administrator.pfx -dc-ip 10.10.10.10" },
+      { type: "out", at: 2.6, color: C.comment, text: "[*] Using principal: administrator@lab.local" },
+      { type: "out", at: 3.1, color: C.comment, text: "[*] Trying to get TGT..." },
+      { type: "out", at: 3.9, color: C.string, text: "[+] Got TGT" },
+      { type: "out", at: 4.5, color: C.comment, text: "[*] Trying to retrieve NT hash for 'administrator'" },
+      { type: "out", at: 5.2, color: C.string, text: "[+] Got hash for 'administrator@lab.local':" },
+    ];
+
+    let lines;
+    if (phase === "find") lines = build(findEntries);
+    else if (phase === "req") lines = build(reqEntries);
+    else lines = build(authEntries);
+
+    // ---- phase pills / footer ----
+    const prog = clamp(rt / dur, 0, 1);
+    const pill = (on) => on
+      ? { c: "oklch(0.129 0.042 264.695)", bg: accent, bd: accent }
+      : { c: C.muted, bg: "rgba(255,255,255,.04)", bd: "rgba(255,255,255,.1)" };
+    const pf = pill(phase === "find"), pr = pill(phase === "req"), pa = pill(phase === "auth");
+
+    const captions = { find: "enumerando plantillas vulnerables", req: "solicitando certificado suplantado", auth: "autenticando · extrayendo hash NT" };
+
+    // ---- FIND visuals ----
+    const scanP = clamp((rt - 2.9) / 1.5, 0, 1);
+    const scanCount = Math.round(scanP * 32);
+    const vulnIdx = [6, 17, 27];
+    const vulnReveal = rt >= 5.2;
+    const cells = Array.from({ length: 32 }, (_, i) => {
+      const lit = i < scanCount;
+      const isV = vulnIdx.includes(i);
+      if (isV && vulnReveal) return { cls: "pulse", bg: "color-mix(in oklab, " + accent + " 55%, transparent)", bd: accent };
+      if (lit) return { cls: "", bg: "rgba(255,255,255,.14)", bd: "rgba(255,255,255,.22)" };
+      return { cls: "", bg: "rgba(255,255,255,.03)", bd: "rgba(255,255,255,.07)" };
+    });
+    const chipData = [
+      { id: "ESC1", desc: "Suplantación por plantilla", at: 5.4 },
+      { id: "ESC4", desc: "ACL peligrosa", at: 5.8 },
+      { id: "ESC8", desc: "Relay a Web Enrollment", at: 6.1 },
+    ];
+    const escChips = chipData.map((c) => {
+      const on = rt >= c.at;
+      return {
+        id: c.id, desc: c.desc,
+        bg: on ? "color-mix(in oklab, " + accent + " 12%, transparent)" : "rgba(255,255,255,.02)",
+        bd: on ? "color-mix(in oklab, " + accent + " 38%, transparent)" : "rgba(255,255,255,.06)",
+        op: on ? "1" : "0", ty: on ? "0px" : "6px",
+      };
+    });
+
+    // ---- REQ visuals ----
+    const reqP = clamp((rt - 0.4) / 4.2, 0, 1);
+    const issued = rt >= 4.9;
+
+    // ---- AUTH visuals ----
+    const tgt = rt >= 3.9;
+    const fullHash = "aad3b435b51404eeaad3b435b51404ee:8846f7eaee8fb117ad06bdd830b7586c";
+    const hashN = clamp(Math.floor(((rt - 5.4) / 1.0) * fullHash.length), 0, fullHash.length);
+    const revealed = rt >= 5.4;
+    const hashDone = hashN >= fullHash.length;
+    const scramble = "0123456789abcdef";
+    let hashText;
+    if (!revealed) {
+      hashText = "•".repeat(fullHash.length);
+    } else {
+      let s = fullHash.slice(0, hashN);
+      for (let i = hashN; i < fullHash.length; i++) {
+        s += fullHash[i] === ":" ? ":" : scramble[Math.floor(Math.random() * 16)];
+      }
+      hashText = s;
+    }
+
+    return {
+      accent, lines,
+      // pills
+      pillFindC: pf.c, pillFindBg: pf.bg, pillFindBd: pf.bd,
+      pillReqC: pr.c, pillReqBg: pr.bg, pillReqBd: pr.bd,
+      pillAuthC: pa.c, pillAuthBg: pa.bg, pillAuthBd: pa.bd,
+      // footer
+      segFind: phase === "find" ? pct(prog) : "100%",
+      segReq: phase === "req" ? pct(prog) : (phase === "auth" ? "100%" : "0%"),
+      segAuth: phase === "auth" ? pct(prog) : "0%",
+      caption: captions[phase],
+      isFind: phase === "find", isReq: phase === "req", isAuth: phase === "auth",
+      // find
+      scanCount, scanW: pct(scanP), cells, escChips,
+      // req
+      reqW: pct(reqP),
+      certBd: issued ? "color-mix(in oklab, " + accent + " 45%, transparent)" : "rgba(255,255,255,.1)",
+      certShadow: issued ? "0 0 40px -10px " + accent : "none",
+      issuedOp: issued ? "1" : "0", issuedTy: issued ? "0px" : "6px",
+      // auth
+      tgtOp: tgt ? "1" : "0", tgtTy: tgt ? "0px" : "6px",
+      tgtBd: tgt ? "color-mix(in oklab, " + accent + " 35%, transparent)" : "rgba(255,255,255,.08)",
+      tgtMark: tgt ? accent : C.muted,
+      hashText,
+      hashColor: hashDone ? accent : (revealed ? C.fg : "oklch(0.4 0.02 255)"),
+      hashGlow: hashDone ? "0 0 18px " + accent : "none",
+      hashBd: hashDone ? "color-mix(in oklab, " + accent + " 40%, transparent)" : "rgba(255,255,255,.08)",
+      hashShadow: hashDone ? "0 0 40px -12px " + accent : "none",
+      tagOp: hashDone ? "1" : "0",
+      tagBg: "color-mix(in oklab, " + accent + " 16%, transparent)",
+    };
+  }
+}
+</script>
+</body>
+</html>

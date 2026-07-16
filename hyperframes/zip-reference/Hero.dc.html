@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</helmet>
+<div style="position:relative;font-family:'Instrument Sans',system-ui,sans-serif;width:100%;min-height:640px;overflow:hidden;background:oklch(0.129 0.042 264.695);color:oklch(0.984 0.003 247.858)">
+  <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 30% -10%, color-mix(in oklab, {{ accent }} 14%, transparent), transparent 68%)"></div>
+
+  <div style="position:relative;max-width:1360px;margin:0 auto;padding:64px 48px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;min-height:640px;box-sizing:border-box">
+
+    <!-- LEFT: text -->
+    <div style="min-width:0">
+      <p style="margin:0;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color: {{ accent }}">ADCS · Volumen 2 · Edición Lab</p>
+      <h1 style="margin:20px 0 0;font-size:clamp(2.4rem,4.4vw,4.4rem);font-weight:600;line-height:1.03;letter-spacing:-.035em">Identifica los <span style="color: {{ accent }}">16 ESC de ADCS.</span></h1>
+      <p style="margin:18px 0 0;max-width:34ch;font-size:clamp(1.15rem,1.6vw,1.6rem);font-weight:500;letter-spacing:-.02em;color:oklch(0.72 0.02 255)">En cinemática. Paso a paso.</p>
+      <p style="margin:26px 0 0;max-width:46ch;font-size:1.05rem;line-height:1.7;color:oklch(0.72 0.02 255)">Un recorrido inmersivo basado en el manual de Certipy v5. Aprende el flujo find → req → auth, visualiza los 5 grupos de fallo y domina la metodología para cada escenario.</p>
+
+      <div style="margin-top:34px;display:flex;flex-wrap:wrap;gap:12px">
+        <a href="#" style="display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 24px;border-radius:10px;font-size:.95rem;font-weight:600;text-decoration:none;color:oklch(0.129 0.042 264.695);background: {{ accent }}">Empezar el recorrido <span aria-hidden="true">→</span></a>
+        <a href="#" style="display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 24px;border-radius:10px;font-size:.95rem;font-weight:600;text-decoration:none;color:oklch(0.92 0.01 255);background:transparent;border:1px solid rgba(255,255,255,.18)">▦ Explorar los 16 ESC</a>
+      </div>
+
+      <dl style="margin:44px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06)">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="background:oklch(0.16 0.03 264);padding:16px 18px">
+            <dt style="font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:600;letter-spacing:-.02em">{{ s.k }}</dt>
+            <dd style="margin:5px 0 0;font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.14em;color:oklch(0.68 0.02 255)">{{ s.v }}</dd>
+          </div>
+        </sc-for>
+      </dl>
+    </div>
+
+    <!-- RIGHT: animation -->
+    <div style="min-width:0;display:flex;align-self:stretch;padding:8px 0">
+      <dc-import name="Hero Certipy Animation" accent="{{ accent }}" speed="{{ speed }}" hint-size="100%,100%" style="width:100%"></dc-import>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:700},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.68 0.16 150)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.68 0.16 150)&quot;,&quot;oklch(0.62 0.2 250)&quot;,&quot;oklch(0.72 0.17 60)&quot;,&quot;oklch(0.6 0.22 25)&quot;,&quot;oklch(0.68 0.13 195)&quot;,&quot;oklch(0.62 0.2 300)&quot;]},&quot;speed&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.4,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      accent: this.props.accent ?? "oklch(0.68 0.16 150)",
+      speed: this.props.speed ?? 1,
+      stats: [
+        { k: "16", v: "Casos ESC" },
+        { k: "5", v: "Grupos de fallo" },
+        { k: "3", v: "Find · Req · Auth" },
+        { k: "100%", v: "Uso educativo" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

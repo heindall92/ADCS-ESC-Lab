@@ -104,7 +104,7 @@ function HomePage() {
         </div>
 
         <div className="relative mx-auto max-w-7xl">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-12 xl:gap-16">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 xl:gap-16">
             <div className="min-w-0">
           <motion.p
             {...fade}
@@ -314,7 +314,7 @@ function HomePage() {
       </section>
 
       {/* ================= JOURNEY + TUTORIAL ================= */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="journey-layout">
           <div className="journey-area-header max-w-2xl">
             <p className="eyebrow text-muted-foreground">{t("home.journey.eyebrow")}</p>

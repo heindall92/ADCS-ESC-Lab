@@ -1,15 +1,31 @@
 <p align="center">
-  <img src="docs/readme-banner.svg" alt="ADCS ESC Lab — Aprende a identificar los 16 ESC con Certipy v5" width="100%"/>
+  <img src="Multimedia/Banner.png" alt="ADCS ESC Lab — Banner" width="100%"/>
 </p>
 
-**Lab educativo multimedia · Active Directory Certificate Services · Certipy v5**
+<p align="center">
+  <video src="Multimedia/Demo%20Musica.mp4" width="100%" controls autoplay loop muted></video>
+</p>
 
-![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
-![TanStack Start](https://img.shields.io/badge/TanStack_Start-1.x-FF4154?style=flat-square)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Tailwind](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![Use](https://img.shields.io/badge/Use-Labs%20autorizados-red?style=flat-square)
+<p align="center">
+  <strong>Aprende a reconocer los 16 ESC por su firma, no por memoria.</strong><br/>
+  Un laboratorio visual y local para recorrer <code>find → signature → ESC → mitigate</code> con Certipy v5.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React 19"/>
+  <img src="https://img.shields.io/badge/TanStack_Start-1.x-FF4154?style=flat-square" alt="TanStack Start"/>
+  <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/License-MIT-52E695?style=flat-square" alt="MIT License"/>
+  <img src="https://img.shields.io/badge/Uso-Labs_autorizados-E7B85B?style=flat-square" alt="Solo labs autorizados"/>
+</p>
+
+<p align="center">
+  <a href="#qué-es-adcs-esc-lab">Visión</a> ·
+  <a href="#características">Características</a> ·
+  <a href="#inicio-rápido">Inicio rápido</a> ·
+  <a href="#rutas-de-la-aplicación">Recorrido</a>
+</p>
 
 > **Solo para entornos controlados y autorizados:** HackTheBox, TryHackMe, VulnHub, laboratorios propios y entornos de práctica con permiso explícito.
 
@@ -42,6 +58,18 @@ certipy-ad find → identificar ESC → leer vector en /esc/ESCn → practicar e
 - **100% local** — Sin dependencias de plataformas externas; listo para clonar y desplegar tú mismo
 
 ---
+
+## Interfaz (Modo Claro / Oscuro)
+
+La aplicación cuenta con una interfaz responsiva basada en **Glassmorphism**, adaptada tanto para modo oscuro como claro:
+
+<p align="center">
+  <img src="Multimedia/Modo%20Oscuro.png" alt="ADCS ESC Lab — Modo Oscuro" width="49%"/>
+  <img src="Multimedia/Modo%20Claro.png" alt="ADCS ESC Lab — Modo Claro" width="49%"/>
+</p>
+
+---
+
 
 ## Requisitos
 
@@ -96,9 +124,27 @@ npm run preview
 | `/blue-team` | Mitigaciones defensivas |
 | `/parche` | Parches y recomendaciones de hardening |
 
----
+## Motion graphic del hero (HyperFrames)
 
-## Estructura del proyecto
+La animación del lado derecho del hero usa [HyperFrames](https://github.com/heygen-com/hyperframes):
+
+| Ruta | Uso |
+|------|-----|
+| `public/hyperframes/hero/index.html` | Composición servida en la app (loop 8s, glass + GSAP) |
+| `hyperframes/hero-motion/` | Proyecto CLI para editar, previsualizar y renderizar |
+
+```bash
+# Previsualizar la composición sola
+cd hyperframes/hero-motion
+npm run dev
+
+# Renderizar a MP4 (requiere FFmpeg instalado)
+npm run render
+```
+
+La home usa una versión nativa equivalente en React/Motion, sin iframe ni CDN, para que el hero aparezca de inmediato incluso sin conexión. El proyecto HyperFrames queda como fuente editable y exportable a vídeo.
+
+---
 
 ```
 adcs-esc-lab/

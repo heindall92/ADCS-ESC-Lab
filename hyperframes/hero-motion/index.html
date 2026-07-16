@@ -1,271 +1,442 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1080, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1080">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body {
-        width: 1080px;
-        height: 1080px;
-        overflow: hidden;
-        background: #0a0e17;
-        font-family: "Instrument Sans", system-ui, -apple-system, sans-serif;
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1080px; height: 1080px; overflow: hidden; }
+      body {
+        color: #eef5ff;
+        background: #09101d;
+        font-family: "Segoe UI", system-ui, sans-serif;
       }
-      #root {
-        position: relative;
-        width: 1080px;
-        height: 1080px;
-        overflow: hidden;
-      }
-      .bg-mesh {
+      #stage { position: relative; width: 1080px; height: 1080px; overflow: hidden; }
+      .background {
         position: absolute;
         inset: 0;
         background:
-          radial-gradient(ellipse 70% 55% at 18% 88%, rgba(61, 214, 140, 0.28), transparent 58%),
-          radial-gradient(ellipse 55% 45% at 88% 12%, rgba(79, 140, 255, 0.22), transparent 55%),
-          radial-gradient(ellipse 90% 60% at 50% -10%, rgba(88, 166, 255, 0.12), transparent 70%),
-          #0a0e17;
+          radial-gradient(circle at 88% 8%, rgba(73, 139, 255, .26), transparent 38%),
+          radial-gradient(circle at 12% 90%, rgba(49, 212, 139, .3), transparent 44%),
+          #09101d;
       }
-      .glass-frame {
+      .grid {
         position: absolute;
-        inset: 48px;
-        border-radius: 32px;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        background: rgba(255, 255, 255, 0.05);
-        box-shadow:
-          0 24px 80px rgba(0, 0, 0, 0.45),
-          inset 0 1px 0 rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(28px);
+        inset: -160px;
+        opacity: .42;
+        background-image:
+          linear-gradient(rgba(255,255,255,.04) 2px, transparent 2px),
+          linear-gradient(90deg, rgba(255,255,255,.04) 2px, transparent 2px);
+        background-size: 70px 70px;
+        mask-image: radial-gradient(circle, black, transparent 68%);
+        transform: perspective(800px) rotateX(58deg) translateY(220px);
+      }
+      .frame {
+        position: absolute;
+        inset: 54px;
         overflow: hidden;
+        border: 2px solid rgba(255,255,255,.18);
+        border-radius: 34px;
+        background: rgba(11, 18, 31, .7);
+        box-shadow: 0 36px 100px rgba(0,0,0,.48), inset 0 2px 0 rgba(255,255,255,.1);
       }
-      .sweep {
+      .topbar {
         position: absolute;
-        top: -20%;
-        left: -40%;
-        width: 45%;
-        height: 140%;
-        background: linear-gradient(
-          105deg,
-          transparent 0%,
-          rgba(255, 255, 255, 0.03) 42%,
-          rgba(88, 166, 255, 0.35) 50%,
-          rgba(61, 214, 140, 0.25) 54%,
-          transparent 62%
-        );
-        transform: skewX(-18deg);
-        pointer-events: none;
-      }
-      .orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(40px);
-        pointer-events: none;
-      }
-      .orb-a { width: 280px; height: 280px; left: -40px; bottom: 120px; background: rgba(61, 214, 140, 0.35); }
-      .orb-b { width: 220px; height: 220px; right: -20px; top: 80px; background: rgba(79, 140, 255, 0.3); }
-      .dots {
-        position: absolute;
-        top: 28px;
-        left: 28px;
-        display: flex;
-        gap: 10px;
-      }
-      .dot { width: 14px; height: 14px; border-radius: 50%; }
-      .dot-r { background: #ff5f56; }
-      .dot-y { background: #ffbd2e; }
-      .dot-g { background: #27c93f; }
-      .shield-wrap {
-        position: absolute;
-        left: 50%;
-        top: 42%;
-        transform: translate(-50%, -50%);
-        width: 220px;
-        height: 220px;
-      }
-      .shield-ring {
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 0 60px rgba(61, 214, 140, 0.25);
-      }
-      .shield-core {
-        position: absolute;
-        inset: 28px;
-        border-radius: 50%;
-        background: rgba(13, 17, 23, 0.85);
-        border: 2px solid rgba(61, 214, 140, 0.55);
+        z-index: 20;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 76px;
         display: grid;
-        place-items: center;
-      }
-      .shield-svg { width: 96px; height: 96px; }
-      .esc-badge {
-        position: absolute;
-        padding: 10px 18px;
-        border-radius: 999px;
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: rgba(255, 255, 255, 0.08);
-        color: #e6edf3;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(12px);
-      }
-      .esc-badge strong { color: #3dd68c; }
-      .esc-1 { left: 72px; top: 210px; }
-      .esc-4 { right: 72px; top: 250px; }
-      .esc-8 { left: 50%; bottom: 290px; transform: translateX(-50%); }
-      .terminal {
-        position: absolute;
-        left: 56px;
-        right: 56px;
-        bottom: 56px;
-        border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(0, 0, 0, 0.35);
-        overflow: hidden;
-      }
-      .terminal-bar {
-        display: flex;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        gap: 8px;
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        color: rgba(230, 237, 243, 0.55);
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 12px;
+        padding: 0 26px;
+        border-bottom: 2px solid rgba(255,255,255,.08);
+        background: rgba(255,255,255,.025);
       }
-      .terminal-body {
-        padding: 18px 20px 22px;
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 13px;
-        line-height: 1.65;
-        min-height: 148px;
-      }
-      .line { opacity: 0; transform: translateY(8px); }
-      .cmd { color: #c9d1d9; }
-      .muted { color: #6e7681; }
-      .warn { color: #d29922; }
-      .ok { color: #3dd68c; }
-      .accent { color: #58a6ff; }
-      .title-chip {
-        position: absolute;
-        top: 88px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 10px 22px;
-        border-radius: 999px;
-        border: 1px solid rgba(88, 166, 255, 0.35);
-        background: rgba(88, 166, 255, 0.12);
-        color: #58a6ff;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.18em;
+      .dots { display: flex; gap: 10px; }
+      .dot { width: 14px; height: 14px; border-radius: 50%; }
+      .red { background: #ff5f57; }
+      .yellow { background: #febc2e; }
+      .green { background: #28c840; }
+      .title {
+        color: rgba(238,245,255,.5);
+        font: 600 17px/1 ui-monospace, "Cascadia Code", monospace;
+        letter-spacing: .16em;
         text-transform: uppercase;
       }
-      .streak {
-        position: absolute;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #58a6ff, #3dd68c, transparent);
-        opacity: 0;
-        filter: blur(0.5px);
+      .live {
+        justify-self: end;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #42dc91;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: .16em;
+        text-transform: uppercase;
       }
-      .streak-a { width: 420px; top: 180px; left: 120px; transform: rotate(-8deg); }
-      .streak-b { width: 360px; bottom: 360px; right: 90px; transform: rotate(12deg); }
+      .live::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #42dc91;
+        box-shadow: 0 0 20px #42dc91;
+      }
+      .phase-pills {
+        position: absolute;
+        z-index: 20;
+        top: 110px;
+        left: 50%;
+        display: flex;
+        gap: 12px;
+        transform: translateX(-50%);
+      }
+      .phase-pill {
+        min-width: 116px;
+        padding: 13px 20px;
+        border: 2px solid rgba(255,255,255,.1);
+        border-radius: 999px;
+        color: rgba(238,245,255,.64);
+        background: rgba(255,255,255,.035);
+        font: 800 16px/1 ui-monospace, "Cascadia Code", monospace;
+        letter-spacing: .14em;
+        text-align: center;
+      }
+      .phase-pill.active {
+        border-color: #42dc91;
+        color: #07130e;
+        background: #42dc91;
+        box-shadow: 0 0 34px rgba(66,220,145,.28);
+      }
+      .scene {
+        position: absolute;
+        z-index: 8;
+        top: 188px;
+        left: 42px;
+        right: 42px;
+        bottom: 100px;
+        display: grid;
+        grid-template-columns: 1.08fr .92fr;
+        gap: 22px;
+      }
+      .panel {
+        overflow: hidden;
+        border: 2px solid rgba(255,255,255,.12);
+        border-radius: 24px;
+        background: rgba(0,0,0,.25);
+        box-shadow: 0 24px 58px rgba(0,0,0,.35), inset 0 2px 0 rgba(255,255,255,.05);
+      }
+      .terminal-head, .visual-head {
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 22px;
+        border-bottom: 2px solid rgba(255,255,255,.07);
+        color: rgba(238,245,255,.64);
+        font: 700 14px/1 ui-monospace, "Cascadia Code", monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+      .visual-head strong { color: #55e3a0; }
+      .terminal-body {
+        padding: 25px 24px;
+        font: 17px/1.67 ui-monospace, "Cascadia Code", monospace;
+      }
+      .term-line { opacity: 0; color: rgba(238,245,255,.5); }
+      .command { color: #eef5ff; }
+      .command::before { content: "$ "; color: #42dc91; }
+      .warning { color: #f3b950; }
+      .accent { color: #42dc91; }
+      .success { color: #98e6b8; }
+      .visual-body { height: calc(100% - 62px); padding: 25px; }
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 10px;
+      }
+      .template-cell {
+        aspect-ratio: 1;
+        border: 2px solid rgba(255,255,255,.07);
+        border-radius: 7px;
+        background: rgba(255,255,255,.025);
+      }
+      .template-cell.scanned { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.12); }
+      .template-cell.vulnerable {
+        border-color: #42dc91;
+        background: rgba(66,220,145,.44);
+        box-shadow: 0 0 24px rgba(66,220,145,.42);
+      }
+      .chips { display: grid; gap: 10px; margin-top: 30px; }
+      .chip {
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 13px 16px;
+        border: 2px solid rgba(66,220,145,.25);
+        border-radius: 11px;
+        color: rgba(238,245,255,.65);
+        background: rgba(66,220,145,.07);
+        font-size: 15px;
+      }
+      .chip strong { color: #42dc91; font-family: ui-monospace, monospace; }
+      .certificate {
+        position: relative;
+        height: 100%;
+        padding: 32px;
+        border: 2px solid rgba(66,220,145,.22);
+        border-radius: 20px;
+        background: linear-gradient(145deg, rgba(255,255,255,.06), transparent);
+      }
+      .certificate h3 { color: #42dc91; font-size: 17px; letter-spacing: .14em; text-transform: uppercase; }
+      .certificate dl { display: grid; gap: 23px; margin-top: 42px; }
+      .certificate dl div { display: flex; min-width: 0; justify-content: space-between; gap: 12px; font: 14px/1 ui-monospace, monospace; }
+      .certificate dt { color: rgba(238,245,255,.64); }
+      .certificate dd { max-width: 205px; overflow: hidden; color: #eef5ff; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
+      .certificate-progress { height: 8px; overflow: hidden; margin-top: 42px; border-radius: 999px; background: rgba(255,255,255,.08); }
+      .certificate-progress i { display: block; width: 100%; height: 100%; background: #42dc91; transform: scaleX(0); transform-origin: left; }
+      .issued {
+        opacity: 0;
+        margin-top: 32px;
+        color: #42dc91;
+        font: 800 17px/1 ui-monospace, monospace;
+      }
+      .auth-stack { display: grid; gap: 22px; }
+      .tgt, .hash-card {
+        padding: 24px;
+        border: 2px solid rgba(255,255,255,.1);
+        border-radius: 18px;
+        background: rgba(255,255,255,.025);
+      }
+      .tgt { opacity: .25; display: flex; justify-content: space-between; color: #eef5ff; }
+      .tgt strong { color: #42dc91; }
+      .hash-card { border-color: rgba(66,220,145,.24); }
+      .hash-card h3 { color: rgba(238,245,255,.5); font-size: 15px; letter-spacing: .13em; text-transform: uppercase; }
+      .hash {
+        margin-top: 26px;
+        color: #42dc91;
+        font: 18px/1.6 ui-monospace, monospace;
+        word-break: break-all;
+        text-shadow: 0 0 20px rgba(66,220,145,.55);
+      }
+      .admin {
+        opacity: 0;
+        display: inline-flex;
+        margin-top: 25px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        color: #09101d;
+        background: #42dc91;
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .footer {
+        position: absolute;
+        z-index: 20;
+        left: 42px;
+        right: 42px;
+        bottom: 32px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        color: rgba(238,245,255,.64);
+        font: 700 13px/1 ui-monospace, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .segments { display: grid; flex: 1; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .segment { height: 6px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.08); }
+      .segment i { display: block; width: 100%; height: 100%; background: #42dc91; transform: scaleX(0); transform-origin: left; }
+      .sweep {
+        position: absolute;
+        z-index: 30;
+        top: -20%;
+        left: -50%;
+        width: 34%;
+        height: 150%;
+        opacity: 0;
+        background: linear-gradient(104deg, transparent, rgba(73,139,255,.28), rgba(255,255,255,.18), rgba(66,220,145,.24), transparent);
+        transform: skewX(-14deg);
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="adcs-hero"
-      data-start="0"
-      data-duration="8"
-      data-width="1080"
-      data-height="1080"
-    >
-      <div class="bg-mesh clip" data-start="0" data-duration="8" data-track-index="0"></div>
-
-      <div id="glass" class="glass-frame clip" data-start="0" data-duration="8" data-track-index="1">
-        <div class="dots">
-          <span class="dot dot-r"></span>
-          <span class="dot dot-y"></span>
-          <span class="dot dot-g"></span>
+    <div data-hf-id="hf-p8rc" id="stage" data-composition-id="adcs-certipy-flow" data-start="0" data-duration="27" data-width="1080" data-height="1080">
+      <div data-hf-id="hf-53gu" id="ambient-background" class="background clip" data-start="0" data-duration="27" data-track-index="0"></div>
+      <div data-hf-id="hf-s6v5" id="perspective-grid" class="grid clip" data-start="0" data-duration="27" data-track-index="1"></div>
+      <div data-hf-id="hf-krj9" id="certipy-window" class="frame clip" data-start="0" data-duration="27" data-track-index="2">
+        <div data-hf-id="hf-mndw" class="topbar">
+          <div data-hf-id="hf-zx1w" class="dots"><i data-hf-id="hf-rkwg" class="dot red"></i><i data-hf-id="hf-gzz3" class="dot yellow"></i><i data-hf-id="hf-tsa8" class="dot green"></i></div>
+          <span data-hf-id="hf-3d0e" class="title">certipy-ad / lab.local</span>
+          <span data-hf-id="hf-jdqt" class="live">live</span>
         </div>
-
-        <div id="sweep" class="sweep"></div>
-        <div class="orb orb-a" id="orb-a"></div>
-        <div class="orb orb-b" id="orb-b"></div>
-        <div class="streak streak-a" id="streak-a"></div>
-        <div class="streak streak-b" id="streak-b"></div>
-
-        <div id="chip" class="title-chip clip" data-start="0.2" data-duration="7.6" data-track-index="2">
-          ADCS · Certipy v5
+        <div data-hf-id="hf-azyy" class="phase-pills">
+          <span data-hf-id="hf-3vts" id="pill-find" class="phase-pill">FIND</span>
+          <span data-hf-id="hf-31w2" id="pill-req" class="phase-pill">REQ</span>
+          <span data-hf-id="hf-nf6a" id="pill-auth" class="phase-pill">AUTH</span>
         </div>
-
-        <div id="shield" class="shield-wrap clip" data-start="0" data-duration="8" data-track-index="3">
-          <div class="shield-ring" id="ring"></div>
-          <div class="shield-core">
-            <svg class="shield-svg" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M48 8 L78 22 V46 C78 66 62 78 48 84 C34 78 18 66 18 46 V22 Z" stroke="#3dd68c" stroke-width="3"/>
-              <rect x="30" y="38" width="36" height="28" rx="4" stroke="#3dd68c" stroke-width="2.5"/>
-              <line x1="36" y1="48" x2="60" y2="48" stroke="#3dd68c" stroke-width="2"/>
-              <line x1="36" y1="56" x2="54" y2="56" stroke="#3dd68c" stroke-width="2"/>
-              <circle cx="48" cy="28" r="6" fill="#3dd68c"/>
-            </svg>
+        <div data-hf-id="hf-ebkm" id="scene-find" class="scene">
+          <section data-hf-id="hf-u5b2" class="panel">
+            <header data-hf-id="hf-3bdz" class="terminal-head"><span data-hf-id="hf-nydb">enumeración</span><strong data-hf-id="hf-xeh9">FIND</strong></header>
+            <div data-hf-id="hf-vv39" class="terminal-body">
+              <p data-hf-id="hf-ea8p" id="find-l1" class="term-line command">certipy-ad find -u lowpriv@lab.local -vulnerable</p>
+              <p data-hf-id="hf-tl7v" id="find-l2" class="term-line">[*] Finding certificate templates</p>
+              <p data-hf-id="hf-w9hy" id="find-l3" class="term-line">[*] Found 32 certificate templates</p>
+              <p data-hf-id="hf-brqt" id="find-l4" class="term-line warning">[!] Vulnerabilities</p>
+              <p data-hf-id="hf-lwl9" id="find-l5" class="term-line accent">ESC1 · ENROLLEE_SUPPLIES_SUBJECT</p>
+              <p data-hf-id="hf-5e9j" id="find-l6" class="term-line accent">ESC4 · Dangerous ACL on template</p>
+              <p data-hf-id="hf-58bf" id="find-l7" class="term-line accent">ESC8 · Web Enrollment + NTLM</p>
+            </div>
+          </section>
+          <section data-hf-id="hf-a0xu" class="panel">
+            <header data-hf-id="hf-ggkr" class="visual-head"><span data-hf-id="hf-m231">plantillas</span><strong data-hf-id="hf-56kt">32/32</strong></header>
+            <div data-hf-id="hf-8y9l" class="visual-body">
+              <div data-hf-id="hf-9yww" id="template-grid" class="template-grid"></div>
+              <div data-hf-id="hf-exrd" class="chips">
+                <div data-hf-id="hf-r7hv" id="chip-1" class="chip"><strong data-hf-id="hf-jyge">ESC1</strong> Suplantación por plantilla</div>
+                <div data-hf-id="hf-kb7t" id="chip-4" class="chip"><strong data-hf-id="hf-hyx9">ESC4</strong> ACL peligrosa</div>
+                <div data-hf-id="hf-nwvt" id="chip-8" class="chip"><strong data-hf-id="hf-mqll">ESC8</strong> Relay a Web Enrollment</div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div data-hf-id="hf-ahyh" id="scene-req" class="scene">
+          <section data-hf-id="hf-af8v" class="panel">
+            <header data-hf-id="hf-uvbb" class="terminal-head"><span data-hf-id="hf-g1jl">solicitud</span><strong data-hf-id="hf-i5n6">REQ</strong></header>
+            <div data-hf-id="hf-fl2x" class="terminal-body">
+              <p data-hf-id="hf-c8yn" id="req-l1" class="term-line command">certipy-ad req -ca LAB-CA -template VulnUser</p>
+              <p data-hf-id="hf-4flu" id="req-l2" class="term-line">[*] Requesting certificate via RPC</p>
+              <p data-hf-id="hf-wofs" id="req-l3" class="term-line">[*] Request ID is 1337</p>
+              <p data-hf-id="hf-mrj0" id="req-l4" class="term-line success">[+] Got certificate for administrator</p>
+              <p data-hf-id="hf-9qhh" id="req-l5" class="term-line success">[+] Saved to administrator.pfx</p>
+            </div>
+          </section>
+          <section data-hf-id="hf-atjw" class="panel">
+            <header data-hf-id="hf-jah7" class="visual-head"><span data-hf-id="hf-zkka">certificado</span><strong data-hf-id="hf-9y9o">LAB-CA</strong></header>
+            <div data-hf-id="hf-l9ot" class="visual-body">
+              <div data-hf-id="hf-bof1" class="certificate">
+                <h3 data-hf-id="hf-19py">Certificate request</h3>
+                <dl data-hf-id="hf-mp71">
+                  <div data-hf-id="hf-yeow"><dt data-hf-id="hf-8adr">subject</dt><dd data-hf-id="hf-sb9g">administrator@lab.local</dd></div>
+                  <div data-hf-id="hf-y7yw"><dt data-hf-id="hf-idl7">template</dt><dd data-hf-id="hf-2h9g">VulnUser · ESC1</dd></div>
+                  <div data-hf-id="hf-x11t"><dt data-hf-id="hf-98cp">ca</dt><dd data-hf-id="hf-pku3">LAB-CA</dd></div>
+                  <div data-hf-id="hf-xfcu"><dt data-hf-id="hf-lvho">key</dt><dd data-hf-id="hf-acw2">RSA-2048</dd></div>
+                </dl>
+                <div data-hf-id="hf-ltp7" class="certificate-progress"><i data-hf-id="hf-u4zp" id="req-progress"></i></div>
+                <p data-hf-id="hf-5711" id="issued" class="issued">✓ EMITIDO · administrator.pfx</p>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div data-hf-id="hf-3yyd" id="scene-auth" class="scene">
+          <section data-hf-id="hf-b7ux" class="panel">
+            <header data-hf-id="hf-uh0a" class="terminal-head"><span data-hf-id="hf-8oo4">kerberos</span><strong data-hf-id="hf-ptts">AUTH</strong></header>
+            <div data-hf-id="hf-gs00" class="terminal-body">
+              <p data-hf-id="hf-vn2h" id="auth-l1" class="term-line command">certipy-ad auth -pfx administrator.pfx</p>
+              <p data-hf-id="hf-2h50" id="auth-l2" class="term-line">[*] Using principal administrator@lab.local</p>
+              <p data-hf-id="hf-ufjx" id="auth-l3" class="term-line">[*] Trying to get TGT</p>
+              <p data-hf-id="hf-ae5e" id="auth-l4" class="term-line success">[+] Got TGT</p>
+              <p data-hf-id="hf-py87" id="auth-l5" class="term-line success">[+] NT hash recovered</p>
+            </div>
+          </section>
+          <section data-hf-id="hf-bm5y" class="panel">
+            <header data-hf-id="hf-iw66" class="visual-head"><span data-hf-id="hf-9jp8">autenticación</span><strong data-hf-id="hf-xrfs">TGT ✓</strong></header>
+            <div data-hf-id="hf-3zbq" class="visual-body auth-stack">
+              <div data-hf-id="hf-q85s" id="tgt" class="tgt"><span data-hf-id="hf-svm5">TGT Kerberos</span><strong data-hf-id="hf-14lg">obtenido</strong></div>
+              <div data-hf-id="hf-9wij" class="hash-card">
+                <h3 data-hf-id="hf-2ebu">NT HASH · administrator</h3>
+                <p data-hf-id="hf-wt34" id="hash" class="hash">8846f7eaee8fb117ad06bdd830b7586c</p>
+                <span data-hf-id="hf-0z4q" id="admin" class="admin">Domain Admin</span>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div data-hf-id="hf-yh7l" class="footer">
+          <div data-hf-id="hf-d65m" class="segments">
+            <span data-hf-id="hf-8ydk" class="segment"><i data-hf-id="hf-18lg" id="seg-find"></i></span>
+            <span data-hf-id="hf-lb40" class="segment"><i data-hf-id="hf-19lb" id="seg-req"></i></span>
+            <span data-hf-id="hf-k46x" class="segment"><i data-hf-id="hf-mcv7" id="seg-auth"></i></span>
           </div>
+          <span data-hf-id="hf-9gff" id="footer-label">enumerando plantillas vulnerables</span>
         </div>
-
-        <div id="esc1" class="esc-badge esc-1 clip" data-start="1.2" data-duration="6.4" data-track-index="4"><strong>ESC1</strong> template</div>
-        <div id="esc4" class="esc-badge esc-4 clip" data-start="1.6" data-duration="6" data-track-index="5"><strong>ESC4</strong> ACL</div>
-        <div id="esc8" class="esc-badge esc-8 clip" data-start="2" data-duration="5.6" data-track-index="6"><strong>ESC8</strong> relay</div>
-
-        <div id="terminal" class="terminal clip" data-start="0.4" data-duration="7.4" data-track-index="7">
-          <div class="terminal-bar">certipy-ad find — lab.local</div>
-          <div class="terminal-body">
-            <div id="l1" class="line cmd">$ certipy-ad find -dc-ip 10.10.10.10</div>
-            <div id="l2" class="line muted">[*] Finding certificate templates</div>
-            <div id="l3" class="line warn">[!] Vulnerabilities</div>
-            <div id="l4" class="line ok">ESC1 · ESC4 · ESC8 detected</div>
-            <div id="l5" class="line accent">[+] BloodHound export ready</div>
-          </div>
-        </div>
+        <div data-hf-id="hf-9a6y" id="sweep" class="sweep"></div>
       </div>
     </div>
-
     <script>
+      const grid = document.querySelector("#template-grid");
+      const vulnerable = new Set([6, 17, 27]);
+      for (let i = 0; i < 32; i += 1) {
+        const cell = document.createElement("i");
+        cell.className = "template-cell";
+        cell.id = `template-${i}`;
+        grid.appendChild(cell);
+      }
+
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true, repeat: -1 });
+      const tl = gsap.timeline({ paused: true });
 
-      tl.fromTo("#glass", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out" }, 0);
-      tl.fromTo("#sweep", { x: "-120%" }, { x: "280%", duration: 1.8, ease: "power2.inOut" }, 0.2);
-      tl.fromTo("#chip", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 0.35);
-      tl.fromTo("#shield", { opacity: 0, scale: 0.6, rotate: -8 }, { opacity: 1, scale: 1, rotate: 0, duration: 1.2, ease: "back.out(1.6)" }, 0.45);
-      tl.to("#ring", { boxShadow: "0 0 90px rgba(61,214,140,0.55)", duration: 0.9, yoyo: true, repeat: 1, ease: "sine.inOut" }, 1.1);
-
-      tl.fromTo("#esc1", { opacity: 0, x: -40, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.65, ease: "power3.out" }, 1.2);
-      tl.fromTo("#esc4", { opacity: 0, x: 40, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.65, ease: "power3.out" }, 1.55);
-      tl.fromTo("#esc8", { opacity: 0, y: 24, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.65, ease: "power3.out" }, 1.9);
-
-      tl.fromTo("#streak-a", { opacity: 0, scaleX: 0.2 }, { opacity: 0.9, scaleX: 1, duration: 0.8, ease: "power2.out" }, 1.4);
-      tl.to("#streak-a", { opacity: 0, duration: 0.5 }, 2.4);
-      tl.fromTo("#streak-b", { opacity: 0, scaleX: 0.2 }, { opacity: 0.85, scaleX: 1, duration: 0.8, ease: "power2.out" }, 2.1);
-      tl.to("#streak-b", { opacity: 0, duration: 0.5 }, 3.1);
-
-      tl.fromTo("#terminal", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.55);
-      ["#l1", "#l2", "#l3", "#l4", "#l5"].forEach((sel, i) => {
-        tl.fromTo(sel, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 1.8 + i * 0.22);
+      tl.set(["#scene-req", "#scene-auth"], { opacity: 0, visibility: "hidden" }, 0);
+      tl.set("#scene-find", { opacity: 1, visibility: "visible" }, 0);
+      tl.set("#pill-find", { className: "phase-pill active" }, 0);
+      tl.fromTo(".frame", { opacity: 0, scale: .95 }, { opacity: 1, scale: 1, duration: .9, ease: "expo.out" }, .15);
+      tl.fromTo("#sweep", { opacity: 0, x: "-40%" }, { opacity: 1, x: "470%", duration: 1.4, ease: "power3.inOut" }, .35);
+      tl.to("#sweep", { opacity: 0, duration: .2 }, 1.8);
+      tl.fromTo("#scene-find", { x: -36 }, { x: 0, duration: .72, ease: "power4.out" }, .35);
+      tl.fromTo("#find-l1", { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: .45, ease: "power3.out" }, .75);
+      ["#find-l2", "#find-l3", "#find-l4", "#find-l5", "#find-l6", "#find-l7"].forEach((selector, index) => {
+        tl.fromTo(selector, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .28, ease: "power2.out" }, 1.5 + index * .42);
       });
+      for (let i = 0; i < 32; i += 1) {
+        tl.set(`#template-${i}`, { className: `template-cell scanned${vulnerable.has(i) ? " vulnerable" : ""}` }, 1.15 + i * .085);
+      }
+      ["#chip-1", "#chip-4", "#chip-8"].forEach((selector, index) => {
+        tl.fromTo(selector, { opacity: 0, x: 18 }, { opacity: 1, x: 0, duration: .36, ease: "back.out(1.35)" }, 3.85 + index * .32);
+      });
+      tl.fromTo("#seg-find", { scaleX: 0 }, { scaleX: 1, duration: 5.15, ease: "none" }, .15);
 
-      tl.to("#orb-a", { x: 30, y: -20, duration: 3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.5);
-      tl.to("#orb-b", { x: -25, y: 18, duration: 3.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.8);
+      tl.to("#scene-find", { opacity: 0, x: -28, duration: .3, ease: "power2.in" }, 5.2);
+      tl.set("#scene-find", { visibility: "hidden" }, 5.5);
+      tl.set("#pill-find", { className: "phase-pill" }, 5.5);
+      tl.set("#pill-req", { className: "phase-pill active" }, 5.5);
+      tl.set("#scene-req", { visibility: "visible" }, 5.5);
+      tl.fromTo("#scene-req", { opacity: 0, x: 34 }, { opacity: 1, x: 0, duration: .6, ease: "expo.out" }, 5.5);
+      tl.set("#footer-label", { textContent: "solicitando certificado suplantado" }, 5.5);
+      tl.fromTo("#req-l1", { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: .42, ease: "power3.out" }, 5.85);
+      ["#req-l2", "#req-l3", "#req-l4", "#req-l5"].forEach((selector, index) => {
+        tl.fromTo(selector, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .3, ease: "power2.out" }, 6.65 + index * .6);
+      });
+      tl.fromTo("#req-progress", { scaleX: 0 }, { scaleX: 1, duration: 3.5, ease: "power1.inOut" }, 6.15);
+      tl.fromTo("#issued", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .5, ease: "back.out(1.4)" }, 9.5);
+      tl.fromTo("#seg-req", { scaleX: 0 }, { scaleX: 1, duration: 5.05, ease: "none" }, 5.55);
 
-      tl.to("#glass", { opacity: 0.92, duration: 0.6, ease: "power1.in" }, 7.2);
+      tl.to("#scene-req", { opacity: 0, x: -28, duration: .3, ease: "power2.in" }, 10.7);
+      tl.set("#scene-req", { visibility: "hidden" }, 11);
+      tl.set("#pill-req", { className: "phase-pill" }, 11);
+      tl.set("#pill-auth", { className: "phase-pill active" }, 11);
+      tl.set("#scene-auth", { visibility: "visible" }, 11);
+      tl.fromTo("#scene-auth", { opacity: 0, x: 34 }, { opacity: 1, x: 0, duration: .6, ease: "expo.out" }, 11);
+      tl.set("#footer-label", { textContent: "autenticando · extrayendo hash NT" }, 11);
+      tl.fromTo("#auth-l1", { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: .42, ease: "power3.out" }, 11.35);
+      ["#auth-l2", "#auth-l3", "#auth-l4", "#auth-l5"].forEach((selector, index) => {
+        tl.fromTo(selector, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .3, ease: "power2.out" }, 12.05 + index * .62);
+      });
+      tl.to("#tgt", { opacity: 1, borderColor: "rgba(66,220,145,.42)", duration: .55, ease: "power2.out" }, 13.25);
+      tl.fromTo("#hash", { opacity: .2, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 1.1, ease: "power1.inOut" }, 14.2);
+      tl.fromTo("#admin", { opacity: 0, scale: .85 }, { opacity: 1, scale: 1, duration: .55, ease: "back.out(1.6)" }, 15.15);
+      tl.fromTo("#seg-auth", { scaleX: 0 }, { scaleX: 1, duration: 5.5, ease: "none" }, 11.05);
 
-      window.__timelines["adcs-hero"] = tl;
+      tl.timeScale(0.62);
+      tl.paused(false);
+      const renderTimeline = gsap.timeline({ paused: true });
+      renderTimeline.add(tl, 0);
+      window.__timelines["adcs-certipy-flow"] = renderTimeline;
     </script>
   </body>
 </html>
