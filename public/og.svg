@@ -1,0 +1,21 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b1220"/>
+      <stop offset="100%" style="stop-color:#132337"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3ecf8e"/>
+      <stop offset="100%" style="stop-color:#5b9fd4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="980" cy="120" r="220" fill="#3ecf8e" opacity="0.06"/>
+  <circle cx="180" cy="520" r="180" fill="#5b9fd4" opacity="0.07"/>
+  <text x="80" y="160" font-family="ui-monospace, Consolas, monospace" font-size="28" fill="#3ecf8e" letter-spacing="4">ADCS · CERTIPY v5</text>
+  <text x="80" y="280" font-family="Georgia, serif" font-size="84" font-weight="700" fill="#f2f5f8">ADCS ESC Lab</text>
+  <text x="80" y="360" font-family="system-ui, sans-serif" font-size="32" fill="#9aa8b8">Identifica los 16 ESC. Lee la firma, no memorices el número.</text>
+  <rect x="80" y="420" width="420" height="4" fill="url(#accent)" rx="2"/>
+  <text x="80" y="490" font-family="ui-monospace, Consolas, monospace" font-size="22" fill="#7a8a9a">find → grupo → req/relay → auth → DCSync</text>
+  <text x="80" y="560" font-family="system-ui, sans-serif" font-size="20" fill="#5a6a7a">Uso educativo · entornos autorizados</text>
+</svg>

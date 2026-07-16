@@ -1,0 +1,114 @@
+<svg width="854" height="210" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 854 210">
+  <style>
+    .title {
+      font-size: 34px;
+      font-weight: 800;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      opacity: 0.88;
+    }
+    .author {
+      font-size: 12px;
+      font-weight: 400;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      opacity: 0.6;
+    }
+    .mono {
+      font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 11px;
+    }
+    .title, .subtitle, .author {
+      animation: fadeIn 1.2s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a7f5a"/>
+      <stop offset="50%" stop-color="#3dd68c"/>
+      <stop offset="100%" stop-color="#4f8cff"/>
+    </linearGradient>
+    <radialGradient id="blob-green" cx="20%" cy="80%" r="55%">
+      <stop offset="0%" stop-color="#3dd68c" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#3dd68c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blob-blue" cx="85%" cy="15%" r="50%">
+      <stop offset="0%" stop-color="#4f8cff" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#4f8cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="blur-soft">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo midnight glass -->
+  <rect width="854" height="210" fill="#0d1117"/>
+  <rect width="854" height="210" fill="url(#blob-green)"/>
+  <rect width="854" height="210" fill="url(#blob-blue)"/>
+
+  <!-- Ondas animadas (estilo portfolio) -->
+  <g transform="translate(427, 105) scale(1, 1) translate(-427, -105)">
+    <path d="M0 0L 0 130Q 213.5 170 427 140T 854 165L 854 0 Z" fill="url(#bg-grad)" opacity="0.35">
+      <animate attributeName="d" dur="20s" repeatCount="indefinite"
+        keyTimes="0;0.333;0.667;1" calcMode="spline"
+        keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1"
+        values="M0 0L 0 130Q 213.5 170 427 140T 854 165L 854 0 Z;M0 0L 0 155Q 213.5 170 427 150T 854 140L 854 0 Z;M0 0L 0 175Q 213.5 145 427 175T 854 140L 854 0 Z;M0 0L 0 130Q 213.5 170 427 140T 854 165L 854 0 Z"/>
+    </path>
+    <path d="M0 0L 0 145Q 213.5 190 427 160T 854 170L 854 0 Z" fill="url(#bg-grad)" opacity="0.28">
+      <animate attributeName="d" dur="20s" repeatCount="indefinite"
+        keyTimes="0;0.333;0.667;1" calcMode="spline"
+        keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1" begin="-10s"
+        values="M0 0L 0 145Q 213.5 190 427 160T 854 170L 854 0 Z;M0 0L 0 160Q 213.5 130 427 130T 854 150L 854 0 Z;M0 0L 0 155Q 213.5 135 427 160T 854 175L 854 0 Z;M0 0L 0 145Q 213.5 190 427 160T 854 170L 854 0 Z"/>
+    </path>
+  </g>
+
+  <!-- Panel glass principal -->
+  <rect x="16" y="12" width="822" height="186" rx="16" fill="url(#glass-fill)" stroke="#ffffff" stroke-opacity="0.18" stroke-width="1.2"/>
+
+  <!-- macOS dots -->
+  <g transform="translate(12, -2)">
+    <circle cx="20" cy="24" r="6" fill="#ff5f56"/>
+    <circle cx="38" cy="24" r="6" fill="#ffbd2e"/>
+    <circle cx="56" cy="24" r="6" fill="#27c93f"/>
+  </g>
+
+  <!-- Texto -->
+  <text text-anchor="start" dominant-baseline="middle" x="50" y="72" class="title" fill="#ffffff">ADCS ESC LAB</text>
+  <text text-anchor="start" dominant-baseline="middle" x="50" y="112" class="subtitle" fill="#e6edf3">16 ESC · Certipy v5 · Lab educativo ADCS</text>
+  <text text-anchor="start" dominant-baseline="middle" x="50" y="148" class="author" fill="#ffffff">Yoandy Ramírez · Pentesting Lab</text>
+
+  <!-- Mini terminal glass -->
+  <g transform="translate(50, 158)">
+    <rect x="0" y="0" width="340" height="32" rx="8" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+    <text x="12" y="20" class="mono" fill="#3dd68c">$ certipy-ad find -dc-ip 10.10.10.10</text>
+  </g>
+
+  <!-- Icono certificado / CA -->
+  <g transform="translate(720, 105)" filter="url(#shadow)">
+    <circle cx="0" cy="0" r="55" fill="#0d1117" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.85"/>
+    <!-- Escudo -->
+    <path d="M0,-38 L28,-24 L28,8 C28,28 14,40 0,46 C-14,40 -28,28 -28,8 L-28,-24 Z" fill="none" stroke="#3dd68c" stroke-width="2.5"/>
+    <!-- Certificado interior -->
+    <rect x="-16" y="-8" width="32" height="24" rx="3" fill="none" stroke="#3dd68c" stroke-width="2"/>
+    <line x1="-10" y1="0" x2="10" y2="0" stroke="#3dd68c" stroke-width="2"/>
+    <line x1="-10" y1="6" x2="6" y2="6" stroke="#3dd68c" stroke-width="2"/>
+    <circle cx="0" cy="-18" r="5" fill="#3dd68c"/>
+    <!-- Badge ESC -->
+    <rect x="18" y="22" width="34" height="18" rx="4" fill="#3dd68c"/>
+    <text x="35" y="34" text-anchor="middle" class="mono" font-size="10" font-weight="700" fill="#0d1117">ESC</text>
+  </g>
+</svg>
