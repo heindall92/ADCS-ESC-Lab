@@ -7,9 +7,10 @@
 </p>
 
 <p align="center">
-  <strong>Aprende a reconocer los 16 ESC por su firma, no por memoria.</strong><br/>
+  <strong>Aprende a reconocer los 16 ESC por su firma, no de memoria.</strong><br/>
   Un laboratorio visual y local para recorrer <code>find → signature → ESC → mitigate</code> con Certipy v5.
 </p>
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React 19"/>
@@ -54,7 +55,7 @@ certipy-ad find → identificar ESC → leer vector en /esc/ESCn → practicar e
 - **Árbol de decisión** — Ayuda a acotar qué ESC investigar según el output
 - **Cheat sheet** — Referencia rápida para pentest en lab
 - **Blue team** — Mitigaciones, parches y hardening
-- **UI glass** — Tema oscuro con paneles translúcidos, mesh de color y paleta intercambiable
+- **UI glass** — Tema oscuro y claro con paneles translúcidos, mesh de color y paleta de acentos intercambiable
 - **100% local** — Sin dependencias de plataformas externas; listo para clonar y desplegar tú mismo
 
 ---
@@ -91,9 +92,9 @@ Herramientas de referencia en el lab (no incluidas en el repo):
 ## Inicio rápido
 
 ```bash
-# Clonar (ajusta la URL cuando subas el repo)
-git clone https://github.com/heindall92/adcs-esc-lab.git
-cd adcs-esc-lab
+# Clonar el repositorio
+git clone https://github.com/heindall92/ADCS-ESC-Lab.git
+cd ADCS-ESC-Lab
 
 # Instalar dependencias
 npm install
@@ -124,6 +125,8 @@ npm run preview
 | `/blue-team` | Mitigaciones defensivas |
 | `/parche` | Parches y recomendaciones de hardening |
 
+---
+
 ## Motion graphic del hero (HyperFrames)
 
 La animación del lado derecho del hero usa [HyperFrames](https://github.com/heygen-com/hyperframes):
@@ -147,22 +150,23 @@ La home usa una versión nativa equivalente en React/Motion, sin iframe ni CDN, 
 ---
 
 ```
-adcs-esc-lab/
+ADCS-ESC-Lab/
 ├── docs/
-│   ├── readme-banner.svg      # Banner hero para este README
+│   ├── readme-banner.svg      # Banner hero original en formato vectorial
 │   └── adcs_esc_lab_card.svg  # Tarjeta para README de perfil GitHub
-├── public/                    # favicon, og.png
+├── Multimedia/                # Capturas de pantalla (modo claro/oscuro) y video demo
+├── public/                    # favicon, og.png y videos del hero (hero-certipy, hero-motion)
 ├── src/
 │   ├── routes/                # Páginas TanStack Router
-│   ├── components/            # UI, sidebar, tutorial
+│   ├── components/            # Componentes de la interfaz de usuario (sidebar, tutorial, etc.)
 │   ├── lib/
-│   │   ├── data/              # Contenido ADCS ES/EN
-│   │   ├── i18n.tsx           # Traducciones
-│   │   ├── theme.tsx          # Tema claro/oscuro + acentos
-│   │   └── accent-palette.ts  # 9 colores de acento
-│   ├── styles.css             # Design system + glass global
-│   ├── server.ts              # Entry SSR con manejo de errores
-│   └── start.ts               # Middleware TanStack Start
+│   │   ├── data/              # Contenido de la teoría de los ESC en ES/EN
+│   │   ├── i18n.tsx           # Configuración del traductor local (ES/EN)
+│   │   ├── theme.tsx          # Gestión de tema claro/oscuro y acentos de color
+│   │   └── accent-palette.ts  # Paleta de 9 colores de acento
+│   ├── styles.css             # Estilos de diseño global y efectos glassmorphism
+│   ├── server.ts              # Servidor de entrada SSR con manejador de errores
+│   └── start.ts               # Configuración inicial del framework
 ├── vite.config.ts
 └── package.json
 ```
@@ -174,9 +178,9 @@ adcs-esc-lab/
 Cuando subas el repo, añade esta tarjeta en la sección **Proyectos** de tu [README de perfil](https://github.com/heindall92/heindall92) (mismo estilo que JUDAS, Heimdall, etc.):
 
 ```html
-<a href="https://github.com/heindall92/adcs-esc-lab">
+<a href="https://github.com/heindall92/ADCS-ESC-Lab">
   <img
-    src="https://raw.githubusercontent.com/heindall92/adcs-esc-lab/main/docs/adcs_esc_lab_card.svg"
+    src="https://raw.githubusercontent.com/heindall92/ADCS-ESC-Lab/main/docs/adcs_esc_lab_card.svg"
     alt="ADCS ESC Lab"
     width="400"
   />
